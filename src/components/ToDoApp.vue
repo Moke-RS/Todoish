@@ -1,11 +1,20 @@
 <template>
   <div class="todo-app">
-    <todo-input 
+    <input 
       v-model="newTodoText"
 			placeholder="New todo"
 			@keydown.enter="addTodo"
     />
-    <todo-list :todos="todos" />
+    <ul v-if="todos.length">
+        <todo-list-item
+            v-for="todo in todos"
+            :key="todo.id"
+            :todo="todo"
+        />
+    </ul>
+    <p v-else>
+        Nothing left in the list. Add a new todo in the input above.
+    </p>
   </div>
 </template>
 
@@ -18,18 +27,32 @@
         margin-top: 50px;
         height: 100vh;
     }
+
+    .input {
+        padding: 8px 10px;
+        border: 2px solid darkblue;
+        min-width: 300px;
+    }
+
+    ul {
+      list-style-type: none;
+      width: 300px;
+    }
+
+    li {
+        margin-bottom: 5px;
+    }
 </style>
 
 
 <script>
-import TodoInput from './ToDoInput.vue';
-import TodoList from './ToDoList.vue';
+import TodoListItem from './TodoListItem.vue';
 import { EventBus } from './../event-bus.js';
 
 let nextTodoId = 0;
 
 export default {
-  components: { TodoInput, TodoList },
+  components: { TodoListItem },
   data () {
     return {
       newTodoText: '', 
